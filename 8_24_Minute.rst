@@ -25,11 +25,13 @@ Summary:
  
 AI - QA - To explore
 #####################
+
 * Define stages of upgrade (such as before, stable environment, services down, etc.)
 * Need to measure downtime for manual upgrades (but, may also depend on db size)
 * When building playbook we need to add hooks in Ansible's playbook for db migration, then record time
  
 What we need:
+
 *       re-test to verify functionality
 *       Automated test that you run and their location
 *       New automations along with credentials and scenario
@@ -40,7 +42,9 @@ Meeting Notes
 
 Cinder Progress
 ***************
+
 POC: Szymon
+
 *       Enablement of rolling upgrades
 *       They have ovo
 *       Multinode test for gates but it is non-voting (what does this test do)
@@ -49,25 +53,32 @@ POC: Szymon
  
 Swift Progress
 ***************
+
 POC: Shashi
+
 *       In progress
-*       See attachement
+*       See current plan at swift folder
  
 Keystone Progress
 *****************
+
 POC: Ron De'Rose
+
 *       Done but not stable
 *       Will not be ready for Newton
 *       http://docs.openstack.org/developer/keystone/upgrading.html#upgrading-without-downtime
  
 Nova Progress
 *************
+
 POC: Maciej & Pushkar
+
 *       OSIC team has not started looking into rolling upgrades just yet
 *       Maciej and Pushkar agreed to take head
 *       Will update by the end of this week
  
 Areas of concern for Nova (via John Garbutt):
+
 *   a test to persist throughout the upgrade
 *   like something running before and verify it is running throughout to the end
 *   John Garbutt prefers steps while running test.  Running specific test at specific points in the upgrade
@@ -79,6 +90,7 @@ Areas of concern for Nova (via John Garbutt):
 *   for now just add a hook that occurs right before we do database migrations, or rather right before you turn all of the services off to do database migrations.  A hook before and after.
 
 Summarized:
+
 *   define stages of upgrade, mainly DURING stage
 *   down time for manual upgrade
 *   down time for rolling upgrade
