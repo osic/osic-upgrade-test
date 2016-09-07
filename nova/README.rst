@@ -7,10 +7,15 @@ Before and After Upgrade Testing
 
 * Verify Nova services are up and running
 
-..code_block:bash
 
-   Run command “openstack compute service list”
-   Services are up “nova-conductor, nova-scheduler, nova-consoleauth, nova-compute”
+.. code-block:: bash
+
+   $ openstack compute service list
+   Verify services are up 
+      nova-conductor
+      nova-scheduler
+      nova-consoleauth
+      nova-compute
 
 * Persistent resources – verify on recently created resouces (action for a VM):
    * tempest.api.compute.servers.test_server_actions.ServerActionsTestJSON.test_pause_unpause_server
@@ -51,33 +56,32 @@ During Upgrade Testing
 ----------------------
 
 What tests would your team want executed during a rolling upgrade?
-*   <QA_team_added> nova.servers.list (via python client call)
-*   TBD – tempest.scenario.test_server_basic_ops.TestServerBasicOps.test_server_basic_ops
-*   TBD - tempest.scenario.test_server_multinode.TestServerMultinode.test_schedule_to_all_nodes
+
+* <QA_team_added> nova.servers.list (via python client call)
+* TBD – tempest.scenario.test_server_basic_ops.TestServerBasicOps.test_server_basic_ops
+* TBD - tempest.scenario.test_server_multinode.TestServerMultinode.test_schedule_to_all_nodes
 
 Rolling Upgrade Steps
 ---------------------
 
-**Souces:**
-
-http://docs.openstack.org/mitaka/install-guide-ubuntu/common/get_started_compute.html
-
-Deployment - Install all nova services at stable/mitaka:
-
-* Controller Nodes:  nova-api nova-scheduler nova-conductor nova-consoleauth nova-novncproxy nova-cert TBD. enable only the compute and metadata APIs enabled_apis
-* Compute Nodes: nova-compute
-
-1.  Change the codebase of the repos to current Master Newton
-2.  DB Expansion
-    * Install nova requirements (from requirements.txt)
-    * Run nova-manage db sync
-    * Run nova-manage api_db sync
-3.  Iterate through the controller nodes.
-    **TBD Is it iterate through the controllers and restart all services? OR turn off all conductor services then start them then the other services?**
-    * Install nova requirements (from requirements.txt)
-    * Run nova-manage db sync
-    * Restart all services: nova-conductor, nova-scheduler, nova-api
-4.  Iterate through the compute nodes:
-    * Restart nova-compute service
-5.  SIG_UP all services
+1. Deployment - Install all nova services at stable/mitaka
+  * Controller Nodes:  nova-api nova-scheduler nova-conductor nova-consoleauth nova-novncproxy nova-cert TBD. enable only the compute and metadata APIs enabled_apis
+  * Compute Nodes: nova-compute
+2. Change the codebase of the repos to current Master Newton
+3. DB Expansion
+   * Install nova requirements (from requirements.txt) **To Be Confirmed**
+   * Run nova-manage db sync
+   * Run nova-manage api_db sync
+4. Iterate through the controller nodes.
+   **TBD Is it iterate through the controllers and restart all services? OR turn off just conductor service on all controllers, then restart conductors then restart the other controller services?**
+   * Install nova requirements (from requirements.txt)
+   * Run nova-manage db sync
+   * Restart all services: nova-conductor, nova-scheduler, nova-api
+5. Iterate through the compute nodes:
+   * **TBD are requirements and nova-manage required here?
+   * Gracefully stop nova-compute service
+   .. code:: bash
+      $ kill -15 nova-compute
+   * Start nova-compute service
+6. Other actions? what are they?
 
