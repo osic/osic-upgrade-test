@@ -1,8 +1,9 @@
 *********************
-#Cinder Rolling Upgrade
+Cinder Rolling Upgrade
 *********************
 
-##Rolling Upgrade Steps
+Rolling Upgrade Steps
+---------------------
 
 1. Install all cinder services working on stable/mitaka
     * Cinder services: cinder-api, cinder-scheduler, cinder-volume, cinder-backup
