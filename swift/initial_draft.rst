@@ -6,20 +6,21 @@ TEST DURING UPGRADE
 ###################
 
 * TEMPEST TEST SUITE - tempest.api.object_storage 
-at https://github.com/openstack/tempest/tree/master/tempest/api/object_storage ]
+   - https://github.com/openstack/tempest/tree/master/tempest/api/object_storage ]
 
-* SWIFT TEST SUIT - swift.test.functional at https://github.com/openstack/swift/tree/master/test/functional
+* SWIFT TEST SUIT - swift.test.functional
+   - https://github.com/openstack/swift/tree/master/test/functional
 
-TEST AFETER UPGRADE
+TEST AFTER UPGRADE
 ###################
 
 * TEMPEST TEST SUITE - tempest.api.object_storage 
-at https://github.com/openstack/tempest/tree/master/tempest/api/object_storage ]
+   - https://github.com/openstack/tempest/tree/master/tempest/api/object_storage ]
 
 * SWIFT TEST SUIT
 
-    * swift.test.functional at https://github.com/openstack/swift/tree/master/test/functional
-    * swift.test.probe at https://github.com/openstack/swift/tree/master/test/probe
+   - swift.test.functional at https://github.com/openstack/swift/tree/master/test/functional
+   - swift.test.probe at https://github.com/openstack/swift/tree/master/test/probe
 
 OTHER TBD
 ##########
