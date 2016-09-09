@@ -2,7 +2,7 @@
 Swift Manual Upgrade - On a multi-node Swift cluster (1 Proxy , 3 ACO)
 ====================
 
-__Upgrade a single storage (ACO) node first__
+__Upgrade a single storage (ACO) node__
   1.	Stop all background Swift jobs with
         - $ swift-init rest stop
   2.	Shutdown all Swift storage processes with
@@ -32,7 +32,8 @@ __Upgrade a single storage (ACO) node first__
 __Upgrading all of the other storage nodes__
   -	Repeat the above steps for each node
 
-__Upgrading Proxy node ** (will update when tested with multiple proxies)__
+__Upgrading Proxy node__
+  - (will update when tested with multiple proxies)
 
 Terms
 =====
