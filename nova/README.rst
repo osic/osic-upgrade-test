@@ -42,24 +42,55 @@ What tests would your team want executed during a rolling upgrade?
 Rolling Upgrade Steps
 ---------------------
 
-1. Deployment - Install all nova services at stable/mitaka
-  * Controller Nodes:  nova-api nova-scheduler nova-conductor nova-consoleauth nova-novncproxy nova-cert TBD. enable only the compute and metadata APIs enabled_apis
-  * Compute Nodes: nova-compute
-2. Change the codebase of the repos to current Master Newton
-3. DB Expansion
-   * Install nova requirements (from requirements.txt) **To Be Confirmed**
-   * Run nova-manage db sync
-   * Run nova-manage api_db sync
-4. Iterate through the controller nodes.
-   **TBD Is it iterate through the controllers and restart all services? OR turn off just conductor service on all controllers, then restart conductors then restart the other controller services?**
-   * Install nova requirements (from requirements.txt)
-   * Run nova-manage db sync
-   * Restart all services: nova-conductor, nova-scheduler, nova-api
-5. Iterate through the compute nodes:
-   * **TBD are requirements and nova-manage required here?
-   * Gracefully stop nova-compute service
-   .. code:: bash
-      $ kill -15 nova-compute
-   * Start nova-compute service
-6. Other actions? what are they?
+TODO: check with OSA on the current and future plans.
 
+1. Deploy previous stable release (i.e. to test Newton, first deploy Mitaka)
+
+  a) Verify the system is working (i.e. tempest smoke test)
+  b) Ensure there is sufficient nova-conductor capacity for the extra upgrade
+     related load
+  c) Read the release notes for the new release, to see if there are any
+     release specific tasks that are required for your chosen configuration.
+
+2. Do pre-maintenance window steps, expect zero API downtime
+
+  a) Update venv (i.e. new code and dependencies)
+  b) Run DB expansion (nova-manage db sync; nova-manage api_db sync)
+     Its possible this may affect performance, but it should not cause
+     any operations to fail.
+
+3. Do maintenance window steps, expect API downtime
+
+  a) Stop all services (running the old code), except nova-compute.
+     For maximum safety (no failed API operations), drain connections
+     to API nodes, then SIG_TERM (i.e. gracefully stop) all the services.
+  b) Start all services, with ``[upgrade_pin]compute=auto.``
+     It is safest to start nova-conductor first and nova-api last.
+
+4. Do more maintenance window steps, expect some delayed API actions
+
+  a) In small batches gracefully shutdown nova-compute (i.e. SIG_TERM),
+     then start the new version of the code with:
+     ``[upgrade_pin]compute=auto``
+     Note this is done in batches so only a few compute nodes will have
+     any delayed API actions, and to ensure there is enough capacity online
+     to service any boot requests that happen during this time.
+  b) Note there is no upgrade of the hypervisor here, this is just upgrading
+     the nova services. Some users choose to live-migrate all instances from
+     old nodes to new nodes to do both of these things at the same time.
+  c) Once all services are running the new code, double check in the DB
+     that there are no old orphaned service records (TODO - provide script)
+  d) Now SIG_HUP all services, to reset the min_service_version cache,
+     to make new features available.
+     (TODO - rollback could be possible before you do this step)
+
+5. Prepare for the next upgrade
+
+  a) Complete all online data migrations by doing:
+     ``nova-manage db online_data_migrations --limit <number>``
+     Note you can use the limit argument to reduce the load this operation
+     will place on the database.
+  b) Look for deprecated features and configuration options, and update
+     the configuration files to remove them all. All options should be
+     supported for one cycle, but should be removed before your next
+     upgrade is performed.
