@@ -33,12 +33,14 @@ __Upgrading all of the other storage nodes__
   -	Repeat the above steps for each node
 
 __Upgrading Proxy node__
-  - (will update when tested with multiple proxies)
+  - WIP (will update when tested with multiple proxies)
 
 Terms
 =====
 __ACO__ - Account Container Object
 
 __SAIO__ - Swift All In One
+
+__WIP__ - Work in progress
 
 Reference - https://www.swiftstack.com/blog/2013/12/20/upgrade-openstack-swift-no-downtime/
