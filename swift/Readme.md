@@ -11,7 +11,6 @@ __Upgrade a single storage (ACO) node__
     - Update source code
       * $ git tag –l # lists all the tags for the given repo
   	  * $ git checkout <tag_to_update_to>
-  	  
     - Upgrade the packages
     	* $ sudo pip install –r requirements.txt --upgrade
     	* $ sudo pip install –r test-requirements.txt –upgrade
