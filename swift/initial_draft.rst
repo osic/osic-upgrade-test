@@ -17,7 +17,6 @@ TEST AFTER UPGRADE
    - https://github.com/openstack/tempest/tree/master/tempest/api/object_storage ]
 - SWIFT TEST SUITE
    - swift.test.functional at https://github.com/openstack/swift/tree/master/test/functional
-   - swift.test.probe at https://github.com/openstack/swift/tree/master/test/probe
 
 OTHER TBD
 ##########
