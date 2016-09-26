@@ -5,6 +5,7 @@ Nova Rolling Upgrade
 Before and After Upgrade Testing
 --------------------------------
 
+* Run Tempest smoke test
 * Verify Nova services are up and running
 
 
@@ -20,11 +21,11 @@ Before and After Upgrade Testing
 * Persistent resources test suite – verify on a created VM:
    * tempest.api.compute.servers.test_server_actions.ServerActionsTestJSON.test_pause_unpause_server
    * tempest.api.compute.servers.test_server_actions.ServerActionsTestJSON.test_suspend_resume_server
-   * tempest.api.compute.servers.test_server_actions.ServerActionsTestJSON.test_shelve_unshelve_server
+   * tempest.api.compute.servers.test_server_actions.ServerActionsTestJSON.test_shelve_unshelve_server -- ** check if OSA config has shelve, also set tempest CONF.compute_feature_enabled.shelve
    * tempest.api.compute.servers.test_server_rescue.ServerRescueTestJSON.test_rescue_unrescue_instance
    * tempest.api.compute.servers.test_server_rescue.ServerRescueTestJSON.test_rescued_vm_add_remove_security_group
-   * tempest.scenario.test_server_multinode.TestServerMultinode.test_schedule_to_all_nodes -- **TBD part of smoke test**
-   * tempest.scenario.test_server_basic_ops.TestServerBasicOps.test_server_basic_ops -- **TBD part of smoke test**
+   * tempest.scenario.test_server_multinode.TestServerMultinode.test_schedule_to_all_nodes -- **Tested as part of the smoke test**
+   * tempest.scenario.test_server_basic_ops.TestServerBasicOps.test_server_basic_ops -- **Tested as part of the smoke test**
 
 * ssh into the VM (tempest hint - set CONF.validation.run_validation to true)
    * tempest.api.compute.servers.test_create_server.ServersTestJSON.test_host_name_is_same_as_server_name
@@ -36,13 +37,12 @@ During Upgrade Testing
 
 What tests would your team want executed during a rolling upgrade?
 
-* <QA_team_added> nova.servers.list (via python client call)
-* TBD – basic server operations
+* nova.servers.list (via python client call) - Every second
+* nova.servers.create then nova.servers.delete (via python client call) - Wait up to 15 seconds for VM spinning, waits for resouce delete to complete.
+* Metric: Overall Downtime. Know when downtime occurred (might be mapped to the actual OSA task being performed at the time downtime started).
 
 Rolling Upgrade Steps
 ---------------------
-
-TODO: check with OSA on the current and future plans.
 
 1. Deploy previous stable release (i.e. to test Newton, first deploy Mitaka)
 
@@ -94,3 +94,24 @@ TODO: check with OSA on the current and future plans.
      the configuration files to remove them all. All options should be
      supported for one cycle, but should be removed before your next
      upgrade is performed.
+
+OSA Syc Up
+------------
+
+Current upgrade script: https://github.com/openstack/openstack-ansible/blob/master/scripts/run-upgrade.sh
+
+* Installs distro packages
+* create ssh keys
+* Upgrade ansible packages
+* Get nova ansible role - https://github.com/openstack/openstack-ansible-os_nova
+* Perform infrastructure upgrade
+* Setup Nova via ansible role https://github.com/openstack/openstack-ansible-os_nova/blob/master/tasks/main.yml
+
+From QA perspective: Nova rolling upgrade happens as an end to end process - stepping would be OSA task stepping not Nova rolling upgrade stepping.
+
+OSA smoother rolling upgrade efforts:
+
+* Implement deployment stages for optimised execution: https://review.openstack.org/#/c/346038/
+* Implement rolling upgrades from Mitaka to Newton: https://review.openstack.org/#/c/365019/
+
+
