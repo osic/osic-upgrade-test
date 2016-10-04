@@ -23,6 +23,10 @@ Rolling Upgrade Steps
         * pgrep -a cinder-volume
         * pgrep -a cinder-backup
         
+        
+##IGNORE THE BELOW TEST :) 
+---------------------------
+
 During Upgrade Testing 
 ---------------------
 What are some test that can be executed during rolling upgrade that cross multiple cinder services?
